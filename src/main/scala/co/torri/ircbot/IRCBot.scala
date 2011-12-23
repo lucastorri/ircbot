@@ -27,6 +27,10 @@ object IRCBot {
         val session = manager.requestConnection(ircServer)
         val ircLogger = MessageLogger(logDir)
         
+        Runtime.getRuntime.addShutdownHook(new Thread {
+            override def run = manager.quit
+        })
+        
         session.addIRCEventListener(IRCProtocolHandler(ircChannel, ircLogger).protocolHandler)
     }
 }
