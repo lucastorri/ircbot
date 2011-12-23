@@ -1,0 +1,3 @@
+Simple bot that connects to a IRC room and save the transcripts to a txt file
+
+java -cp ircbot.jar co.torri.ircbot.IRCBot <botName> <ircServer> <ircChannel> <outputDir>
