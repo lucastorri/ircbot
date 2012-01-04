@@ -2,12 +2,14 @@ package co.torri.ircbot
 
 import java.io.File.{separator => |}
 import java.io.File
+import java.io.FileWriter
 import java.io.PrintWriter
 import java.text.SimpleDateFormat
 import java.util.Date
 
 import jerklib.events.IRCEvent.Type.CHANNEL_MESSAGE
 import jerklib.events.IRCEvent.Type.CONNECT_COMPLETE
+import jerklib.events.IRCEvent.Type.ERROR
 import jerklib.events.IRCEvent
 import jerklib.events.MessageEvent
 import jerklib.listeners.IRCEventListener
@@ -54,6 +56,7 @@ case class IRCProtocolHandler(channel: String, logger: MessageLogger) {
                     session.setRejoinOnKick(true)
                 }
                 case CHANNEL_MESSAGE => onMessage(e.asInstanceOf[MessageEvent])
+				case ERROR => println(e.getRawEventData)
                 case _ => {}
             }
 
@@ -80,17 +83,16 @@ case class MessageLogger(dir: File) {
                 try printer.close
                 catch logException
             }
-            try currentFile = (filename, Some(new PrintWriter(filename)))
+            try currentFile = (filename, Some(new PrintWriter(new FileWriter(filename, true), true)))
             catch logException
         }
         currentFile._2.get
     }
 
     def apply(msg: IRCMessage) =
-        try {
+        if (msg.isLogable) try {
             val logger = loggerFor(msg)
             logger.println(msg)
-            logger.flush
         } catch logException
 
 }
@@ -98,6 +100,7 @@ case class MessageLogger(dir: File) {
 object IRCMessage {
 
     private val _timeFormat = new SimpleDateFormat("[yyyy-MM-dd/HH:mm:ss]")
+	val ignoredMessages = List("[mute]")
 
     def formatTime(msg: IRCMessage) =
         _timeFormat.format(msg.time)
@@ -105,6 +108,9 @@ object IRCMessage {
 }
 
 case class IRCMessage(channel: String, sender: String, msg: String, time: Date) {
+	
+	def isLogable =
+		IRCMessage.ignoredMessages.forall(!msg.contains(_))
 
     override def toString =
         IRCMessage.formatTime(this) + " " + sender + ": " + msg
