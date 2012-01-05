@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OUT_DIR=/output/folder
+OUT_DIR=/Users/lucastorri/tmp/data
 IRC_SERVER="irc.freenode.net"
 BOT_NAME="logbot"
 CHANNELS="scala scalatra playframework"

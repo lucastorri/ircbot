@@ -1,0 +1,12 @@
+#!/bin/bash
+
+export SCRIPT=`basename "$0"`
+export DIR=`dirname "$0"`
+
+export BOT_NAME=$SCRIPT
+export IRC_SERVER="irc.freenode.net"
+export IRC_CHANNEL="#scala"
+
+eval "$DIR/ircbot.sh $1"
+
+exit $?
