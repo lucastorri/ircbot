@@ -22,7 +22,7 @@ object IRCBot {
     def main(args: Array[String]) {
         val ircNick = args(0)
         val ircServer = args(1)
-        val ircChannel = args(2)
+        val ircChannels = args(2).split("\\s+").toList
         val logDir = new File(args(3))
             
         val manager = new ConnectionManager(new Profile(ircNick))
@@ -33,12 +33,12 @@ object IRCBot {
             override def run = manager.quit
         })
         
-        session.addIRCEventListener(IRCProtocolHandler(ircChannel, ircLogger).protocolHandler)
+        session.addIRCEventListener(IRCProtocolHandler(ircChannels, ircLogger).protocolHandler)
     }
 }
 
 
-case class IRCProtocolHandler(channel: String, logger: MessageLogger) {
+case class IRCProtocolHandler(channels: List[String], logger: MessageLogger) {
 
     def onMessage(channel: String, sender: String, msg: String, pvt: Boolean = false, date: Date = new Date) : Unit =
         if (channel == channel && !pvt) logger(IRCMessage(channel, sender, msg, date))
@@ -52,7 +52,7 @@ case class IRCProtocolHandler(channel: String, logger: MessageLogger) {
             e.getType match {
                 case CONNECT_COMPLETE => {
                     val session = e.getSession
-                    session.join(channel)
+                    channels.foreach(session.join(_))
                     session.setRejoinOnKick(true)
                 }
                 case CHANNEL_MESSAGE => onMessage(e.asInstanceOf[MessageEvent])
