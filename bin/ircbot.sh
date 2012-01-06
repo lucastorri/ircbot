@@ -12,7 +12,7 @@
   
 
 MAIN=co.torri.ircbot.IRCBot
-CLASSPATH=`dirname "$0"`/lib/ircbot.jar
+CLASSPATH=`dirname "$0"`/../lib/ircbot.jar
 LOG_FILE=$IRCLOG_LOGS_DIR/$SCRIPT.log
 PID_FILE=$IRCLOG_PIDS_DIR/$SCRIPT.pid
 
