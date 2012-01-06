@@ -2,8 +2,8 @@ package co.torri.ircbot
 
 import java.io.File.{separator => |}
 import java.io.File
-import java.io.FileWriter
-import java.io.PrintWriter
+import java.io.PrintStream
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -69,7 +69,8 @@ case class MessageLogger(dir: File) {
     private val logFileFormat = "%s_%s.log"
     private val logFileDateFormat = new SimpleDateFormat("yyyy-MM-dd")
     private val logException: PartialFunction[Throwable, Unit] = { case e => println("Error logging chat messages"); e.printStackTrace }
-    private var currentFile: (String, Option[PrintWriter]) = ("", None)
+    private var currentFile: (String, Option[PrintStream]) = ("", None)
+    val defaultEncoding = "UTF-8"
 
     private def logFileFor(msg: IRCMessage) =
         (dir.getCanonicalPath + | +
@@ -83,7 +84,7 @@ case class MessageLogger(dir: File) {
                 try printer.close
                 catch logException
             }
-            try currentFile = (filename, Some(new PrintWriter(new FileWriter(filename, true), true)))
+            try currentFile = (filename, Some(new PrintStream(new FileOutputStream(filename, true), true, defaultEncoding)))
             catch logException
         }
         currentFile._2.get
