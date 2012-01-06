@@ -9,6 +9,12 @@
   # IRCLOG_PIDS_DIR
   # IRC_SERVER
   # IRC_CHANNELS
+
+if [ -a env.sh ]
+then
+  	source env.sh
+fi
+
   
 
 MAIN=co.torri.ircbot.IRCBot
