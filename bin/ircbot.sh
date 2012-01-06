@@ -10,12 +10,12 @@
   # IRC_SERVER
   # IRC_CHANNELS
 
+cd `dirname "$0"`
 if [ -a env.sh ]
 then
   	source env.sh
 fi
 
-  
 
 MAIN=co.torri.ircbot.IRCBot
 CLASSPATH=`dirname "$0"`/../lib/ircbot.jar
