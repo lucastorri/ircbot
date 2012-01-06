@@ -15,4 +15,4 @@ DIST_ZIP=`echo $SOURCE_JAR | sed 's/target\/\(.*\)-assembly-\([0-9\.]*\)\.jar/\1
 cp $SOURCE_JAR dist/lib/$DEST_JAR
 cp bin/* dist/bin/
 cd dist
-zip -r dist/$DIST_ZIP *
+zip -r $DIST_ZIP *
