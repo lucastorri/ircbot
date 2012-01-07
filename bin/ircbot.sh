@@ -16,9 +16,10 @@ then
   	source env.sh
 fi
 
+cp() { cd ../lib; pwd; }
 
 MAIN=co.torri.ircbot.IRCBot
-CLASSPATH=`dirname "$0"`/../lib/ircbot.jar
+CLASSPATH="`cp`/ircbot.jar"
 LOG_FILE=$IRCLOG_LOGS_DIR/$SCRIPT.log
 PID_FILE=$IRCLOG_PIDS_DIR/$SCRIPT.pid
 
